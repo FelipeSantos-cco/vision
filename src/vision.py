@@ -1,7 +1,8 @@
 import pyautogui
+import inspect
 from time import sleep
 
-class VisionAutomation:
+class VisionAutomation():
     def __init__(self, template_path: str):
         """
         Initialize the Vision class.
@@ -67,7 +68,42 @@ class VisionAutomation:
             x, y = self.find_element(template_name, confidence)
             pyautogui.click(x, y)
         except Exception as e:
-            raise Exception(f"click() - Error: {e}")
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
+        
+    
+    def move_to(self, template_name: str, confidence: float = 0.8):
+        """
+        Moves the cursor to a specific region on the screen.
+
+        Args:
+            template_name (str): The name of the template image file.
+            confidence (float): The confidence threshold (default is 0.8).
+        """
+        try:
+            x, y = self.find_element(template_name, confidence)
+            pyautogui.moveTo(x, y)
+            
+        except Exception as e:
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
+        
+
+    def click_write(self, template_name: str, text: str, confidence: float = 0.8):
+            """
+            Click and write on the element. Recommended for use in text inputs
+        
+            Args:
+                template_name (str): The name of the template image file.
+                text (str): The string value to be written to the clicked element.
+                confidence (float): The confidence threshold (default is 0.8).
+
+            """
+            try:
+                x, y = self.find_element(template_name, confidence)
+                pyautogui.click(x, y)
+                pyautogui.write(text)
+            
+            except Exception as e:
+                raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
 
 
     def paste(self, template_name: str, confidence: float = 0.8):
@@ -83,7 +119,7 @@ class VisionAutomation:
             pyautogui.click(x, y)
             pyautogui.hotkey('ctrl', 'v')
         except Exception as e:
-            raise Exception(f"paste() - Error: {e}")
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
 
 
     def double_click_and_copy(self, template_name: str, confidence: float = 0.8):
@@ -100,7 +136,7 @@ class VisionAutomation:
             pyautogui.hotkey('ctrl', 'c')
         
         except Exception as e:
-            raise Exception(f"double_click_and_copy() - Error: {e}")
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
         
 
     def select_and_copy(self, template_name_start: str, template_name_end: str, confidence: float = 0.8):
@@ -120,7 +156,7 @@ class VisionAutomation:
             pyautogui.hotkey('ctrl', 'c')
             
         except Exception as e:
-            raise Exception(f"select_and_copy() - Error: {e}")
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
 
 
     def wait_for_element(self, template_name: str, confidence: float = 0.8, timeout: int = 60):
@@ -172,11 +208,11 @@ class VisionAutomation:
             small_element = pyautogui.locateCenterOnScreen(f"{self.template_path}/{small_template_name}", region=region, confidence=confidence)
 
             if small_element is not None:
-                pyautogui.moveTo(small_element)
+                pyautogui.move_to(small_element)
                 pyautogui.click()
                 
             else:
                 raise Exception(f"Small template {small_template_name} not found within large template {large_template_name}.")
         
         except Exception as e:
-            raise Exception(f"find_and_click_in_template() - Error: {e}")
+            raise Exception(f"{inspect.currentframe().f_code.co_name}() - Error: {e}")
